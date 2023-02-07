@@ -1,3 +1,16 @@
 * {
     background-color: antiquewhite;
 }
+
+.board {
+    height: 400px;
+    width: 400px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr'
+
+}
+
+section div {
+    border: 1px solid black;
+}
