@@ -1,4 +1,9 @@
-(function () {
+const Symbols = (function () {
+  let symbolOne;
+  let SymbolTwo;
+  return { symbolOne };
+})();
+const TicTacToe = (function () {
   const GameBoard = (function () {
     const board = document.querySelectorAll('.board div');
     const boardArray = [...board];
@@ -47,12 +52,9 @@
   })();
 
   const Players = function (name, key) {
-    const player = function () {
-      const player1Name = name;
-      const player1Key = key;
-      return { player1Name, player1Key };
-    };
-    return { player };
+    const player1Name = name;
+    const player1Key = key;
+    return { player1Name, player1Key };
   };
 
   let click = 0;
@@ -61,10 +63,10 @@
     fillBoard(e) {
       if (e.target.textContent !== '') return;
       if (click === 0 || click % 2 === 0) {
-        e.target.textContent = `${marker[0]}`;
+        e.target.textContent = `${Symbols.symbolOne}`;
         click += 1;
       } else if (click !== 0 || click % 2 !== 0) {
-        e.target.textContent = `${marker[1]}`;
+        e.target.textContent = `0`;
         click += 1;
       }
     },
@@ -141,11 +143,7 @@
     GameBoard.boardArray.forEach((e) => (e.style.pointerEvents = 'none'));
   };
 
-  const player1 = Players('player1', '0');
-  const player2 = Players('player2', 'X');
-  const marker = [player1.player().player1Key, player2.player().player1Key];
-
-  const Game = (function () {
+  const Game = function () {
     const flow = (function () {
       GameBoard.boardArray.forEach((square) =>
         square.addEventListener('click', events.fillBoard)
@@ -176,6 +174,107 @@
         square.addEventListener('click', events.checkWinner)
       );
     })();
-  })();
-  console.log(Game);
+  };
+  return { Game, Players, GameBoard };
 })();
+
+const select = (function () {
+  const domCache = {
+    pvp: document.querySelector('.pvp'),
+    pve: document.querySelector('.pve'),
+    playerOne: document.querySelector('.player-one'),
+    playerTwo: document.querySelector('.player-two'),
+    playerOneName: document.querySelector('.player-name-one'),
+    playerTwoName: document.querySelector('.player-name-two'),
+    buttonOne: document.querySelector('.play-one'),
+    buttonTwo: document.querySelector('.play-two'),
+    second: document.querySelectorAll('.second'),
+    first: document.querySelectorAll('.first'),
+    input: document.querySelectorAll('input'),
+    difficulty: document.querySelector('.difficulty'),
+    easy: document.querySelector('.easy'),
+    medium: document.querySelector('.medium'),
+    godlike: document.querySelector('.godlike'),
+  };
+  const x = domCache.playerOne.querySelector('.x');
+  const o = domCache.playerOne.querySelector('.o');
+  const events = {
+    pveClicked() {
+      resetGame();
+      resetDisplay();
+      difficulty.selectDifficulty();
+      domCache.easy.addEventListener('click', difficulty.easySelected);
+      domCache.medium.addEventListener('click', difficulty.mediumSelected);
+      domCache.godlike.addEventListener('click', difficulty.godlikeSelected);
+      domCache.playerOne.classList.remove('hidden');
+      const computer = domCache.playerTwo.querySelector('h3');
+      computer.classList.remove('hidden');
+    },
+    pvpClicked() {
+      resetGame();
+      resetDisplay();
+      domCache.playerOne.classList.remove('hidden');
+      domCache.second.forEach((e) => e.classList.remove('hidden'));
+      domCache.first.forEach((e) => e.classList.remove('hidden'));
+      domCache.playerTwoName.textContent = '';
+    },
+    playOne() {
+      TicTacToe.Game();
+    },
+    symbolX() {
+      const playerOneName = domCache.playerOne.querySelector('input').value;
+      const playerOne = TicTacToe.Players(playerOneName, 'X');
+      Symbols.symbolOne = playerOne.player1Key;
+    },
+    symbol0() {
+      const playerOneName = domCache.playerOne.querySelector('input').value;
+      const playerOne = TicTacToe.Players(playerOneName, '0');
+      Symbols.symbolOne = playerOne.player1Key;
+    },
+  };
+  const difficulty = {
+    selectDifficulty() {
+      domCache.difficulty.classList.remove('hidden');
+    },
+
+    easySelected() {
+      domCache.playerTwoName.textContent = 'Bob';
+      domCache.playerTwoName.classList.remove('hidden');
+      domCache.difficulty.classList.add('hidden');
+    },
+
+    mediumSelected() {
+      domCache.playerTwoName.textContent = 'Carlos Magnusen';
+      domCache.playerTwoName.classList.remove('hidden');
+      domCache.difficulty.classList.add('hidden');
+    },
+
+    godlikeSelected() {
+      domCache.playerTwoName.textContent = 'Skynet';
+      domCache.playerTwoName.classList.remove('hidden');
+      domCache.difficulty.classList.add('hidden');
+    },
+  };
+
+  function resetDisplay() {
+    domCache.input.forEach((i) => (i.value = ''));
+    const secondArray = [...domCache.second];
+    secondArray[1].classList.add('hidden');
+    secondArray[2].classList.add('hidden');
+    secondArray[3].classList.add('hidden');
+  }
+
+  function resetGame() {
+    TicTacToe.GameBoard.boardArray.forEach((cell) => (cell.textContent = ''));
+  }
+
+  function test() {
+    o.addEventListener('click', events.symbol0);
+    x.addEventListener('click', events.symbolX);
+    domCache.pve.addEventListener('click', events.pveClicked);
+    domCache.pvp.addEventListener('click', events.pvpClicked);
+    domCache.buttonOne.addEventListener('click', events.playOne);
+  }
+  return { test, events };
+})();
+select.test();

@@ -15,21 +15,55 @@
     </header>
 
     <main>
-        <section class="board">
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
+        <section class="game-mode">
+            <div>
+                <h2>Select a game mode</h2>
+                <button class="pvp">PvP</button>
+                <button class="pve">PvE</button>
+            </div>
+            <div class="difficulty hidden">
+                <h3>Select Difficulty</h3>
+                <div>
+                    <button class="easy">easy</button>
+                    <button class="medium">medium</button>
+                    <button class="godlike">godlike</button>
+                </div>
+            </div>
         </section>
-        <section>
-            <button class="x">X</button>
-            <button class="o">O</button>
-        </section>
+        <div class="main-container">
+            <section class="first player-one hidden">
+                <h3>Player 1:</h3>
+                <label for="name-one" class="first">Enter your name:</label>
+                <input type="text" id="name-one" class="first">
+                <button class="first play-one">Play</button>
+                <p class="first player-name-one"></p>
+                <p>Select your icon</p>
+                <button class="x">X</button>
+                <button class="o">0</button>
+                <span class="hidden"></span>
+            </section>
+            <section class="board">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+            </section>
+            <section class="player-two">
+                <h3 class="second hidden">Player 2:</h3>
+                <label for="name-one" class="second hidden">Enter your name:</label>
+                <input type="text" id="name-one" class="second hidden">
+                <button class="play-two second hidden">Play</button>
+                <p class="player-name-two hidden"></p>
+                <span class="hidden"></span>
+            </section>
+            <button class="restart">Restart</button>
+
+        </div>
     </main>
 
     <script src="script.js"></script>
