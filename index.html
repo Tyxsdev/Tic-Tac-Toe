@@ -31,16 +31,20 @@
             </div>
         </section>
         <div class="main-container">
-            <section class="first player-one hidden">
-                <h3>Player 1:</h3>
-                <label for="name-one" class="first">Enter your name:</label>
-                <input type="text" id="name-one" class="first">
-                <button class="first play-one">Play</button>
-                <p class="first player-name-one"></p>
-                <p>Select your icon</p>
-                <button class="x">X</button>
-                <button class="o">0</button>
-                <span class="hidden"></span>
+            <section>
+                <div class="player-one hidden">
+                    <h3>Player 1:</h3>
+                    <label for="name-one" class="hidden-too">Enter your name:</label>
+                    <input type="text" id="name-one" class="hidden-too">
+                    <button class="play-one hidden-too">Play</button>
+                    <span class="name-selected-one"></span>
+                </div>
+                <div class="icon-container hidden">
+                    <p>Select your icon</p>
+                    <button class="x">X</button>
+                    <button class="o">0</button>
+                    <span class="icon-selected-one"></span>
+                </div>
             </section>
             <section class="board">
                 <div></div>
@@ -53,15 +57,17 @@
                 <div></div>
                 <div></div>
             </section>
-            <section class="player-two">
-                <h3 class="second hidden">Player 2:</h3>
-                <label for="name-one" class="second hidden">Enter your name:</label>
-                <input type="text" id="name-one" class="second hidden">
-                <button class="play-two second hidden">Play</button>
-                <p class="player-name-two hidden"></p>
-                <span class="hidden"></span>
+            <section>
+                <div class="hidden player-two">
+                    <h3>Player 2:</h3>
+                    <label for="name-one" class="hidden-too">Enter your name:</label>
+                    <input type="text" id="name-one" class="hidden-too">
+                    <button class="play-two hidden-too">Play</button>
+                    <span class="name-selected-two"></span>
+                    <span class="icon-selected-two"></span>
+                </div>
             </section>
-            <button class="restart">Restart</button>
+            <button class="start">Start Game</button>
 
         </div>
     </main>

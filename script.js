@@ -1,8 +1,3 @@
-const Symbols = (function () {
-  let symbolOne;
-  let SymbolTwo;
-  return { symbolOne };
-})();
 const TicTacToe = (function () {
   const GameBoard = (function () {
     const board = document.querySelectorAll('.board div');
@@ -50,25 +45,51 @@ const TicTacToe = (function () {
 
     return { boardArray, divider };
   })();
-
-  const Players = function (name, key) {
-    const player1Name = name;
-    const player1Key = key;
-    return { player1Name, player1Key };
-  };
-
-  let click = 0;
-
   const events = {
-    fillBoard(e) {
-      if (e.target.textContent !== '') return;
-      if (click === 0 || click % 2 === 0) {
-        e.target.textContent = `${Symbols.symbolOne}`;
-        click += 1;
-      } else if (click !== 0 || click % 2 !== 0) {
-        e.target.textContent = `0`;
-        click += 1;
-      }
+    pveClicked() {
+      resetGame();
+      resetDisplay();
+      nameTwoDisplay.textContent = '';
+      computerDisplay.forEach((e) => e.classList.add('hidden'));
+      domCache.difficulty.classList.remove('hidden');
+      domCache.easy.addEventListener('click', difficulty.easySelected);
+      domCache.medium.addEventListener('click', difficulty.mediumSelected);
+      domCache.godlike.addEventListener('click', difficulty.godlikeSelected);
+    },
+    pvpClicked() {
+      resetGame();
+      resetDisplay();
+      domCache.buttonOne.classList.remove('hidden');
+      domCache.playerOne.classList.remove('hidden');
+      domCache.playerTwo.classList.remove('hidden');
+      domCache.playerTwoName.textContent = '';
+    },
+    playOne() {
+      nameOneDisplay.textContent = inputOne.value;
+      domCache.buttonOne.classList.add('hidden');
+      inputOne.value = '';
+      hidenOneDisplay.forEach((e) => e.classList.add('hidden'));
+      domCache.iconContainer.classList.remove('hidden');
+    },
+    playTwo() {
+      nameTwoDisplay.textContent = inputTwo.value;
+      domCache.buttonTwo.classList.add('hidden');
+      inputTwo.value = '';
+      computerDisplay.forEach((e) => e.classList.add('hidden'));
+    },
+    symbolX() {
+      iconHeading.classList.add('hidden');
+      x.classList.add('hidden');
+      o.classList.add('hidden');
+      iconSelectedOne.textContent = 'Plays with X';
+      iconSelectedTwo.textContent = 'Plays with 0';
+    },
+    symbol0() {
+      iconHeading.classList.add('hidden');
+      x.classList.add('hidden');
+      o.classList.add('hidden');
+      iconSelectedOne.textContent = 'Plays with 0';
+      iconSelectedTwo.textContent = 'Plays with X';
     },
     checkWinner() {
       let text1 = '';
@@ -141,12 +162,39 @@ const TicTacToe = (function () {
 
   const stopGame = function () {
     GameBoard.boardArray.forEach((e) => (e.style.pointerEvents = 'none'));
+    click = 0;
+    random = Math.floor(Math.random() * 100);
   };
+
+  let click = 0;
+  function fill(e) {
+    console.log(random);
+    const turn = firstTurn();
+    if (turn.firstPlayer.key === 'Plays with X') {
+      if (e.target.textContent !== '') return;
+      if (click === 0 || click % 2 === 0) {
+        e.target.textContent = 'X';
+        click += 1;
+      } else if (click !== 0 || click % 2 !== 0) {
+        e.target.textContent = `0`;
+        click += 1;
+      }
+    } else {
+      if (e.target.textContent !== '') return;
+      if (click === 0 || click % 2 === 0) {
+        e.target.textContent = '0';
+        click += 1;
+      } else if (click !== 0 || click % 2 !== 0) {
+        e.target.textContent = `X`;
+        click += 1;
+      }
+    }
+  }
 
   const Game = function () {
     const flow = (function () {
       GameBoard.boardArray.forEach((square) =>
-        square.addEventListener('click', events.fillBoard)
+        square.addEventListener('click', fill)
       );
       const winnerCells = GameBoard.divider();
       winnerCells.firstCol.forEach((square) =>
@@ -175,97 +223,109 @@ const TicTacToe = (function () {
       );
     })();
   };
-  return { Game, Players, GameBoard };
-})();
-
-const select = (function () {
   const domCache = {
+    iconContainer: document.querySelector('.icon-container'),
+    start: document.querySelector('.start'),
     pvp: document.querySelector('.pvp'),
     pve: document.querySelector('.pve'),
     playerOne: document.querySelector('.player-one'),
     playerTwo: document.querySelector('.player-two'),
-    playerOneName: document.querySelector('.player-name-one'),
-    playerTwoName: document.querySelector('.player-name-two'),
+    playerTwoName: document.querySelector('.name-selected-two'),
     buttonOne: document.querySelector('.play-one'),
     buttonTwo: document.querySelector('.play-two'),
-    second: document.querySelectorAll('.second'),
-    first: document.querySelectorAll('.first'),
-    input: document.querySelectorAll('input'),
     difficulty: document.querySelector('.difficulty'),
     easy: document.querySelector('.easy'),
     medium: document.querySelector('.medium'),
     godlike: document.querySelector('.godlike'),
   };
-  const x = domCache.playerOne.querySelector('.x');
-  const o = domCache.playerOne.querySelector('.o');
-  const events = {
-    pveClicked() {
-      resetGame();
-      resetDisplay();
-      difficulty.selectDifficulty();
-      domCache.easy.addEventListener('click', difficulty.easySelected);
-      domCache.medium.addEventListener('click', difficulty.mediumSelected);
-      domCache.godlike.addEventListener('click', difficulty.godlikeSelected);
-      domCache.playerOne.classList.remove('hidden');
-      const computer = domCache.playerTwo.querySelector('h3');
-      computer.classList.remove('hidden');
-    },
-    pvpClicked() {
-      resetGame();
-      resetDisplay();
-      domCache.playerOne.classList.remove('hidden');
-      domCache.second.forEach((e) => e.classList.remove('hidden'));
-      domCache.first.forEach((e) => e.classList.remove('hidden'));
-      domCache.playerTwoName.textContent = '';
-    },
-    playOne() {
-      TicTacToe.Game();
-    },
-    symbolX() {
-      const playerOneName = domCache.playerOne.querySelector('input').value;
-      const playerOne = TicTacToe.Players(playerOneName, 'X');
-      Symbols.symbolOne = playerOne.player1Key;
-    },
-    symbol0() {
-      const playerOneName = domCache.playerOne.querySelector('input').value;
-      const playerOne = TicTacToe.Players(playerOneName, '0');
-      Symbols.symbolOne = playerOne.player1Key;
-    },
-  };
+  const iconHeading = domCache.iconContainer.querySelector('p');
+  const x = domCache.iconContainer.querySelector('.x');
+  const o = domCache.iconContainer.querySelector('.o');
+  const iconSelectedOne =
+    domCache.iconContainer.querySelector('.icon-selected-one');
+  const iconSelectedTwo =
+    domCache.playerTwo.querySelector('.icon-selected-two');
+  const inputOne = domCache.playerOne.querySelector('input');
+  const inputTwo = domCache.playerTwo.querySelector('input');
+  const nameOneDisplay = domCache.playerOne.querySelector('.name-selected-one');
+  const nameTwoDisplay = domCache.playerTwo.querySelector('.name-selected-two');
+  const computerDisplay = domCache.playerTwo.querySelectorAll('.hidden-too');
+  const hidenOneDisplay = domCache.playerOne.querySelectorAll('.hidden-too');
   const difficulty = {
-    selectDifficulty() {
-      domCache.difficulty.classList.remove('hidden');
-    },
-
     easySelected() {
+      domCache.playerTwo.classList.remove('hidden');
+      computerDisplay.forEach((e) => e.classList.add('hidden'));
       domCache.playerTwoName.textContent = 'Bob';
-      domCache.playerTwoName.classList.remove('hidden');
       domCache.difficulty.classList.add('hidden');
+      domCache.playerOne.classList.remove('hidden');
+      domCache.buttonOne.classList.remove('hidden');
     },
 
     mediumSelected() {
+      domCache.playerTwo.classList.remove('hidden');
+      computerDisplay.forEach((e) => e.classList.add('hidden'));
       domCache.playerTwoName.textContent = 'Carlos Magnusen';
-      domCache.playerTwoName.classList.remove('hidden');
       domCache.difficulty.classList.add('hidden');
+      domCache.playerOne.classList.remove('hidden');
+      domCache.buttonOne.classList.remove('hidden');
     },
 
     godlikeSelected() {
+      domCache.playerTwo.classList.remove('hidden');
+      computerDisplay.forEach((e) => e.classList.add('hidden'));
       domCache.playerTwoName.textContent = 'Skynet';
-      domCache.playerTwoName.classList.remove('hidden');
       domCache.difficulty.classList.add('hidden');
+      domCache.playerOne.classList.remove('hidden');
+      domCache.buttonOne.classList.remove('hidden');
     },
   };
 
   function resetDisplay() {
-    domCache.input.forEach((i) => (i.value = ''));
-    const secondArray = [...domCache.second];
-    secondArray[1].classList.add('hidden');
-    secondArray[2].classList.add('hidden');
-    secondArray[3].classList.add('hidden');
+    inputOne.value = '';
+    nameOneDisplay.textContent = '';
+    hidenOneDisplay.forEach((e) => e.classList.remove('hidden'));
+    computerDisplay.forEach((e) => e.classList.remove('hidden'));
+    domCache.iconContainer.classList.add('hidden');
+    iconHeading.classList.remove('hidden');
+    x.classList.remove('hidden');
+    o.classList.remove('hidden');
+    iconSelectedOne.textContent = '';
+    iconSelectedTwo.textContent = '';
+    domCache.playerOne.classList.add('hidden');
+    domCache.buttonOne.classList.add('hidden');
+    domCache.difficulty.classList.add('hidden');
   }
 
   function resetGame() {
     TicTacToe.GameBoard.boardArray.forEach((cell) => (cell.textContent = ''));
+    TicTacToe.GameBoard.boardArray.forEach((e) => (e.style.pointerEvents = ''));
+  }
+
+  let random = Math.floor(Math.random() * 100);
+  function firstTurn() {
+    console.log(random);
+    if (random > 50) {
+      const firstPlayer = {
+        name: document.querySelector('.name-selected-one').textContent,
+        key: document.querySelector('.icon-selected-one').textContent,
+      };
+      const secondPlayer = {
+        name: document.querySelector('.name-selected-two').textContent,
+        key: document.querySelector('.icon-selected-two').textContent,
+      };
+      return { firstPlayer, secondPlayer };
+    }
+    if (random <= 50) {
+      const firstPlayer = {
+        name: document.querySelector('.name-selected-two').textContent,
+        key: document.querySelector('.icon-selected-two').textContent,
+      };
+      const secondPlayer = {
+        name: document.querySelector('.name-selected-one').textContent,
+        key: document.querySelector('.icon-selected-one').textContent,
+      };
+      return { firstPlayer, secondPlayer };
+    }
   }
 
   function test() {
@@ -274,7 +334,10 @@ const select = (function () {
     domCache.pve.addEventListener('click', events.pveClicked);
     domCache.pvp.addEventListener('click', events.pvpClicked);
     domCache.buttonOne.addEventListener('click', events.playOne);
+    domCache.buttonTwo.addEventListener('click', events.playTwo);
+    domCache.start.addEventListener('click', TicTacToe.Game);
   }
-  return { test, events };
+
+  return { Game, GameBoard, test };
 })();
-select.test();
+TicTacToe.test();
