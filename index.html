@@ -7,6 +7,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tic Tac Toe</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;1,400;1,700&display=swap"
+        rel="stylesheet">
 </head>
 
 <body>
@@ -16,24 +20,27 @@
 
     <main>
         <section class="game-mode">
-            <div>
+            <div class="gamemode-head">
                 <h2>Select a game mode</h2>
-                <button class="pvp">PvP</button>
-                <button class="pve">PvE</button>
+                <div class="button-container">
+                    <button class="pvp">PvP</button>
+                    <button class="pve">PvE</button>
+                </div>
             </div>
             <div class="difficulty hidden">
                 <h3>Select Difficulty</h3>
-                <div>
+                <div class="button-container">
                     <button class="easy">easy</button>
                     <button class="medium">medium</button>
                     <button class="godlike">godlike</button>
                 </div>
             </div>
-            <p class="winner"></p>
         </section>
+
         <div class="main-container">
-            <section>
-                <div class="player-one hidden">
+            <p class="winner"></p>
+            <section class="first-section">
+                <div class="player-one">
                     <h3>Player 1:</h3>
                     <label for="name-one" class="hidden-too">Enter your name:</label>
                     <input type="text" id="name-one" class="hidden-too">
@@ -41,34 +48,40 @@
                     <span class="name-selected-one"></span>
                 </div>
                 <div class="icon-container hidden">
-                    <p>Select your icon</p>
+                    <p class="icon-heading">Select your icon</p>
                     <button class="x">X</button>
                     <button class="o">0</button>
                     <span class="icon-selected-one"></span>
                 </div>
             </section>
             <section class="board">
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
+                <div class="cell-1"></div>
+                <div class="cell-2"></div>
+                <div class="cell-3"></div>
+                <div class="cell-4"></div>
+                <div class="cell-5"></div>
+                <div class="cell-6"></div>
+                <div class="cell-7"></div>
+                <div class="cell-8"></div>
+                <div class="cell-9"></div>
             </section>
-            <section>
-                <div class="hidden player-two">
+            <section class="second-section">
+                <div class="player-two">
                     <h3>Player 2:</h3>
                     <label for="name-one" class="hidden-too">Enter your name:</label>
                     <input type="text" id="name-one" class="hidden-too">
                     <button class="play-two hidden-too">Play</button>
                     <span class="name-selected-two"></span>
-                    <span class="icon-selected-two"></span>
+                    <div>
+                        <span class="icon-selected-two"></span>
+                    </div>
                 </div>
             </section>
-            <button class="start">Start Game</button>
+            <p class="error"></p>
+            <div class="start-restart">
+                <button class="start">Start Game</button>
+                <button class="restart">Restart Game</button>
+            </div>
 
         </div>
     </main>
