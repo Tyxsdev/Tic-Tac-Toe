@@ -361,7 +361,6 @@ const TicTacToe = (function () {
       return;
     }
     errorMessage.textContent = ``;
-    console.log(GameBoard.boardArray[0].myProp);
     GameBoard.boardArray.forEach((e) => (e.style.pointerEvents = ''));
     const turn = (function firstTurn() {
       if (random > 50) {
@@ -388,9 +387,29 @@ const TicTacToe = (function () {
       }
     })();
 
-    winner.textContent = `${
-      turn.firstPlayer.name
-    } goes first with the ${turn.firstPlayer.key.toLowerCase()}`;
+    if (iconSelectedOne.textContent === turn.firstPlayer.key) {
+      if (turn.firstPlayer.name === '') {
+        console.log('a');
+        winner.textContent = `Player 1 goes first with the ${turn.firstPlayer.key.toLowerCase()}`;
+      } else if (turn.firstPlayer.name !== '') {
+        console.log('b');
+        winner.textContent = `${
+          turn.firstPlayer.name
+        } goes first with the ${turn.firstPlayer.key.toLowerCase()}`;
+      }
+    }
+
+    if (iconSelectedTwo.textContent === turn.firstPlayer.key) {
+      if (turn.firstPlayer.name === '') {
+        console.log('c');
+        winner.textContent = `Player 2 goes first with the ${turn.firstPlayer.key.toLowerCase()}`;
+      } else if (turn.firstPlayer.name !== '') {
+        console.log('d');
+        winner.textContent = `${
+          turn.firstPlayer.name
+        } goes first with the ${turn.firstPlayer.key.toLowerCase()}`;
+      }
+    }
 
     if (
       GameBoard.boardArray[0].myProp === '' ||
