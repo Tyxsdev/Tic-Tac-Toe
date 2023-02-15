@@ -36,6 +36,7 @@ const TicTacToe = (function () {
   const start = domCache.main.querySelector('.start');
   const reStart = domCache.main.querySelector('.restart');
   const errorMessage = domCache.main.querySelector('.error');
+  let thereIsAWinner = false;
 
   const GameBoard = (function () {
     const boardArray = [...board];
@@ -91,12 +92,16 @@ const TicTacToe = (function () {
       easyButton.addEventListener('click', difficulty.easySelected);
       mediumButton.addEventListener('click', difficulty.mediumSelected);
       godlikeButton.addEventListener('click', difficulty.godlikeSelected);
+      pvpButton.dataset.selected = 'not-selected';
+      pveButton.dataset.selected = 'selected';
     },
 
     pvpClicked() {
       resetFullGame();
       resetDisplay();
       setDisplay();
+      pvpButton.dataset.selected = 'selected';
+      pveButton.dataset.selected = 'not-selected';
     },
 
     playOne() {
@@ -180,6 +185,7 @@ const TicTacToe = (function () {
 
   function resetFullGame() {
     stopGame();
+    thereIsAWinner = false;
     GameBoard.boardArray.forEach(
       (cell) => (cell.style.backgroundColor = '#77e1b0')
     );
@@ -188,6 +194,7 @@ const TicTacToe = (function () {
   }
 
   function reStartGame() {
+    thereIsAWinner = false;
     if (iconSelectedOne.textContent === '') {
       errorMessage.textContent = `Select a name and then an icon to start playing`;
       return;
@@ -314,12 +321,95 @@ const TicTacToe = (function () {
       }
     }
     checkWinner();
+    if (
+      pveButton.dataset.selected === 'selected' &&
+      pvpButton.dataset.selected === 'not-selected' &&
+      (GameBoard.boardArray[0].myProp.firstPlayer.name === 'Bob' ||
+        GameBoard.boardArray[0].myProp.firstPlayer.name === 'Carlos Magnusen' ||
+        GameBoard.boardArray[0].myProp.firstPlayer.name === 'Skynet') &&
+      thereIsAWinner === false
+    ) {
+      pcPlay1(GameBoard.boardArray[0].myProp);
+    }
+
+    if (
+      pveButton.dataset.selected === 'selected' &&
+      pvpButton.dataset.selected === 'not-selected' &&
+      (GameBoard.boardArray[0].myProp.secondPlayer.name === 'Bob' ||
+        GameBoard.boardArray[0].myProp.secondPlayer.name ===
+          'Carlos Magnusen' ||
+        GameBoard.boardArray[0].myProp.secondPlayer.name === 'Skynet') &&
+      thereIsAWinner === false
+    ) {
+      pcPlay2(GameBoard.boardArray[0].myProp);
+    }
+  }
+
+  function pcPlay1(players) {
+    for (let i = 0; i < 9; i++) {
+      const a = Math.floor(Math.random() * 9);
+      if (players.firstPlayer.key === 'Icon X') {
+        if (GameBoard.boardArray[a].textContent === '') {
+          GameBoard.boardArray[a].textContent = 'X';
+          click += 1;
+          console.log(`a ${i}`);
+          break;
+        } else {
+          i = 0;
+          console.log(`b ${i}`);
+          continue;
+        }
+      } else if (players.firstPlayer.key === 'Icon 0') {
+        if (GameBoard.boardArray[a].textContent === '') {
+          GameBoard.boardArray[a].textContent = '0';
+          click += 1;
+          console.log(`c ${i}`);
+          break;
+        } else {
+          i = 0;
+          console.log(`d ${i}`);
+          continue;
+        }
+      }
+    }
+    checkWinner();
+  }
+
+  function pcPlay2(players) {
+    for (let i = 0; i < 9; i++) {
+      const a = Math.floor(Math.random() * 9);
+      if (players.secondPlayer.key === 'Icon X') {
+        if (GameBoard.boardArray[a].textContent === '') {
+          GameBoard.boardArray[a].textContent = 'X';
+          click += 1;
+          console.log(`a ${i}`);
+          break;
+        } else {
+          i = 0;
+          console.log(`b ${i}`);
+          continue;
+        }
+      } else if (players.secondPlayer.key === 'Icon 0') {
+        if (GameBoard.boardArray[a].textContent === '') {
+          GameBoard.boardArray[a].textContent = '0';
+          click += 1;
+          console.log(`c ${i}`);
+          break;
+        } else {
+          i = 0;
+          console.log(`d ${i}`);
+          continue;
+        }
+      }
+    }
+    checkWinner();
   }
 
   function victory(icon, players, victoryCells) {
     const first = players.firstPlayer;
     const second = players.secondPlayer;
     victoryCells.forEach((e) => (e.style.backgroundColor = '#826bb0'));
+    thereIsAWinner = true;
 
     if (first.key === 'Icon X' && icon === 'X') {
       if (first.name === '') {
@@ -371,11 +461,7 @@ const TicTacToe = (function () {
         reStartGame();
       }
     });
-    errorMessage.textContent = ``;
-    GameBoard.boardArray.forEach((e) => {
-      e.style.pointerEvents = 'all';
-      e.style.cursor = 'pointer';
-    });
+
     const turn = (function firstTurn() {
       if (random > 50) {
         const firstPlayer = {
@@ -401,6 +487,21 @@ const TicTacToe = (function () {
       }
     })();
 
+    if (
+      GameBoard.boardArray[0].myProp === '' ||
+      GameBoard.boardArray[0].myProp === undefined
+    ) {
+      GameBoard.boardArray.forEach((cell) => {
+        cell.myProp = turn;
+      });
+    }
+
+    errorMessage.textContent = ``;
+    GameBoard.boardArray.forEach((e) => {
+      e.style.pointerEvents = 'all';
+      e.style.cursor = 'pointer';
+    });
+
     if (iconSelectedOne.textContent === turn.firstPlayer.key) {
       if (turn.firstPlayer.name === '') {
         winner.textContent = `Player 1 goes first with the ${turn.firstPlayer.key.toLowerCase()}`;
@@ -421,14 +522,14 @@ const TicTacToe = (function () {
       }
     }
     if (
-      GameBoard.boardArray[0].myProp === '' ||
-      GameBoard.boardArray[0].myProp === undefined
+      pveButton.dataset.selected === 'selected' &&
+      pvpButton.dataset.selected === 'not-selected' &&
+      (GameBoard.boardArray[0].myProp.firstPlayer.name === 'Bob' ||
+        GameBoard.boardArray[0].myProp.firstPlayer.name === 'Carlos Magnusen' ||
+        GameBoard.boardArray[0].myProp.firstPlayer.name === 'Skynet')
     ) {
-      GameBoard.boardArray.forEach((cell) => {
-        cell.myProp = turn;
-      });
+      pcPlay1(GameBoard.boardArray[0].myProp);
     }
-
     writeOnBoard();
   };
 
