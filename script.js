@@ -109,6 +109,11 @@ const TicTacToe = (function () {
       buttonOne.classList.add('hidden');
       hidenOneDisplay.forEach((e) => e.classList.add('hidden'));
       domCache.iconContainer.classList.remove('hidden');
+      iconHeading.classList.remove('hidden');
+      x.classList.remove('hidden');
+      o.classList.remove('hidden');
+      iconSelectedOne.classList.remove('hidden');
+      iconSelectedTwo.classList.remove('hidden');
     },
 
     playTwo() {
