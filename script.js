@@ -180,6 +180,9 @@ const TicTacToe = (function () {
 
   function resetFullGame() {
     stopGame();
+    GameBoard.boardArray.forEach(
+      (cell) => (cell.style.backgroundColor = '#77e1b0')
+    );
     GameBoard.boardArray.forEach((cell) => (cell.textContent = ''));
     GameBoard.boardArray.forEach((cell) => (cell.myProp = ''));
   }
@@ -189,21 +192,24 @@ const TicTacToe = (function () {
       errorMessage.textContent = `Select a name and then an icon to start playing`;
       return;
     }
+    GameBoard.boardArray.forEach(
+      (cell) => (cell.style.backgroundColor = '#77e1b0')
+    );
     const previusRandom = random;
     const previusFirstPlayer = GameBoard.boardArray[0].myProp.firstPlayer;
     const previusSecondPlayer = GameBoard.boardArray[0].myProp.secondPlayer;
     stopGame();
+    random = Math.floor(Math.random() * 100);
     GameBoard.boardArray.forEach((cell) => (cell.textContent = ''));
-    const newRandom = random;
 
     if (
-      (previusRandom > 50 && newRandom > 50) ||
-      (previusRandom <= 50 && newRandom <= 50)
+      (previusRandom > 50 && random > 50) ||
+      (previusRandom <= 50 && random <= 50)
     ) {
       Game();
     } else if (
-      (previusRandom > 50 && newRandom <= 50) ||
-      (previusRandom < 50 && newRandom > 50)
+      (previusRandom > 50 && random <= 50) ||
+      (previusRandom < 50 && random > 50)
     ) {
       GameBoard.boardArray[0].myProp.firstPlayer = previusSecondPlayer;
       GameBoard.boardArray[0].myProp.secondPlayer = previusFirstPlayer;
@@ -214,7 +220,6 @@ const TicTacToe = (function () {
   const stopGame = function () {
     GameBoard.boardArray.forEach((e) => (e.style.pointerEvents = 'none'));
     click = 0;
-    random = Math.floor(Math.random() * 100);
   };
 
   function checkWinner() {
@@ -234,56 +239,56 @@ const TicTacToe = (function () {
       colOne[0] === colOne[1] &&
       colOne[0] === colOne[2]
     ) {
-      victory(colOne[0], players);
+      victory(colOne[0], players, winnerCells.firstCol);
     }
     if (
       colTwo[0] !== '' &&
       colTwo[0] === colTwo[1] &&
       colTwo[0] === colTwo[2]
     ) {
-      victory(colTwo[0], players);
+      victory(colTwo[0], players, winnerCells.secondCol);
     }
     if (
       colThree[0] !== '' &&
       colThree[0] === colThree[1] &&
       colThree[0] === colThree[2]
     ) {
-      victory(colThree[0], players);
+      victory(colThree[0], players, winnerCells.thirdCol);
     }
     if (
       rowOne[0] !== '' &&
       rowOne[0] === rowOne[1] &&
       rowOne[0] === rowOne[2]
     ) {
-      victory(rowOne[0], players);
+      victory(rowOne[0], players, winnerCells.firstRow);
     }
     if (
       rowTwo[0] !== '' &&
       rowTwo[0] === rowTwo[1] &&
       rowTwo[0] === rowTwo[2]
     ) {
-      victory(rowTwo[0], players);
+      victory(rowTwo[0], players, winnerCells.secondRow);
     }
     if (
       rowThree[0] !== '' &&
       rowThree[0] === rowThree[1] &&
       rowThree[0] === rowThree[2]
     ) {
-      victory(rowThree[0], players);
+      victory(rowThree[0], players, winnerCells.thirdRow);
     }
     if (
       diagOne[0] !== '' &&
       diagOne[0] === diagOne[1] &&
       diagOne[0] === diagOne[2]
     ) {
-      victory(diagOne[0], players);
+      victory(diagOne[0], players, winnerCells.firstDiag);
     }
     if (
       diagTwo[0] !== '' &&
       diagTwo[0] === diagTwo[1] &&
       diagTwo[0] === diagTwo[2]
     ) {
-      victory(diagTwo[0], players);
+      victory(diagTwo[0], players, winnerCells.secondDiag);
     }
   }
 
@@ -311,19 +316,20 @@ const TicTacToe = (function () {
     checkWinner();
   }
 
-  function victory(icon, players) {
+  function victory(icon, players, victoryCells) {
     const first = players.firstPlayer;
     const second = players.secondPlayer;
+    victoryCells.forEach((e) => (e.style.backgroundColor = '#826bb0'));
 
     if (first.key === 'Icon X' && icon === 'X') {
       if (first.name === '') {
-        winner.textContent = `Victory!!! player 1 wins the match`;
+        winner.textContent = `Victory!!! Player 1 wins the match`;
       } else {
         winner.textContent = `Victory!!! ${first.name} wins the match`;
       }
     } else if (first.key === 'Icon 0' && icon === '0') {
       if (first.name === '') {
-        winner.textContent = `Victory!!! player 1 wins the match`;
+        winner.textContent = `Victory!!! Player 1 wins the match`;
       } else {
         winner.textContent = `Victory!!! ${first.name} wins the match`;
       }
@@ -331,13 +337,13 @@ const TicTacToe = (function () {
 
     if (second.key === 'Icon X' && icon === 'X') {
       if (second.name === '') {
-        winner.textContent = `Victory!!! player 2 wins the match`;
+        winner.textContent = `Victory!!! Player 2 wins the match`;
       } else {
         winner.textContent = `Victory!!! ${second.name} wins the match`;
       }
     } else if (second.key === 'Icon 0' && icon === '0') {
       if (second.name === '') {
-        winner.textContent = `Victory!!! player 2 wins the match`;
+        winner.textContent = `Victory!!! Player 2 wins the match`;
       } else {
         winner.textContent = `Victory!!! ${second.name} wins the match`;
       }
@@ -360,8 +366,16 @@ const TicTacToe = (function () {
       errorMessage.textContent = `Select a name and then an icon to start playing`;
       return;
     }
+    GameBoard.boardArray.forEach((e) => {
+      if (e.textContent !== '') {
+        reStartGame();
+      }
+    });
     errorMessage.textContent = ``;
-    GameBoard.boardArray.forEach((e) => (e.style.pointerEvents = ''));
+    GameBoard.boardArray.forEach((e) => {
+      e.style.pointerEvents = 'all';
+      e.style.cursor = 'pointer';
+    });
     const turn = (function firstTurn() {
       if (random > 50) {
         const firstPlayer = {
@@ -389,10 +403,8 @@ const TicTacToe = (function () {
 
     if (iconSelectedOne.textContent === turn.firstPlayer.key) {
       if (turn.firstPlayer.name === '') {
-        console.log('a');
         winner.textContent = `Player 1 goes first with the ${turn.firstPlayer.key.toLowerCase()}`;
       } else if (turn.firstPlayer.name !== '') {
-        console.log('b');
         winner.textContent = `${
           turn.firstPlayer.name
         } goes first with the ${turn.firstPlayer.key.toLowerCase()}`;
@@ -401,21 +413,20 @@ const TicTacToe = (function () {
 
     if (iconSelectedTwo.textContent === turn.firstPlayer.key) {
       if (turn.firstPlayer.name === '') {
-        console.log('c');
         winner.textContent = `Player 2 goes first with the ${turn.firstPlayer.key.toLowerCase()}`;
       } else if (turn.firstPlayer.name !== '') {
-        console.log('d');
         winner.textContent = `${
           turn.firstPlayer.name
         } goes first with the ${turn.firstPlayer.key.toLowerCase()}`;
       }
     }
-
     if (
       GameBoard.boardArray[0].myProp === '' ||
       GameBoard.boardArray[0].myProp === undefined
     ) {
-      GameBoard.boardArray.forEach((cell) => (cell.myProp = turn));
+      GameBoard.boardArray.forEach((cell) => {
+        cell.myProp = turn;
+      });
     }
 
     writeOnBoard();
